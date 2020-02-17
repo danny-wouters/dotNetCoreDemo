@@ -15,5 +15,7 @@ namespace HelloCore.Models
 
         [DataType(DataType.Date)]
         public DateTime AangemaaktDatum { get; set; }
+
+        public ICollection<Bestelling> Bestellingen { get; set; }
     }
 }
