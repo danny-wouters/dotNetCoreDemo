@@ -23,6 +23,12 @@
         <dd>
             @Html.DisplayFor(model => model.Prijs)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Klant)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Klant.Naam)
+        </dd>
     </dl>
     
     <form asp-action="Delete">

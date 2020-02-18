@@ -22,7 +22,8 @@ namespace HelloCore.Controllers
         // GET: Bestelling
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Bestellingen.ToListAsync());
+            var helloCoreContext = _context.Bestellingen.Include(b => b.Klant);
+            return View(await helloCoreContext.ToListAsync());
         }
 
         // GET: Bestelling/Details/5
@@ -34,6 +35,7 @@ namespace HelloCore.Controllers
             }
 
             var bestelling = await _context.Bestellingen
+                .Include(b => b.Klant)
                 .FirstOrDefaultAsync(m => m.BestellingID == id);
             if (bestelling == null)
             {
@@ -46,6 +48,7 @@ namespace HelloCore.Controllers
         // GET: Bestelling/Create
         public IActionResult Create()
         {
+            ViewData["KlantID"] = new SelectList(_context.Klanten, "Id", "Naam");
             return View();
         }
 
@@ -62,6 +65,7 @@ namespace HelloCore.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["KlantID"] = new SelectList(_context.Klanten, "Id", "Naam", bestelling.KlantID);
             return View(bestelling);
         }
 
@@ -78,6 +82,7 @@ namespace HelloCore.Controllers
             {
                 return NotFound();
             }
+            ViewData["KlantID"] = new SelectList(_context.Klanten, "Id", "Naam", bestelling.KlantID);
             return View(bestelling);
         }
 
@@ -113,6 +118,7 @@ namespace HelloCore.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["KlantID"] = new SelectList(_context.Klanten, "Id", "Naam", bestelling.KlantID);
             return View(bestelling);
         }
 
@@ -125,6 +131,7 @@ namespace HelloCore.Controllers
             }
 
             var bestelling = await _context.Bestellingen
+                .Include(b => b.Klant)
                 .FirstOrDefaultAsync(m => m.BestellingID == id);
             if (bestelling == null)
             {
