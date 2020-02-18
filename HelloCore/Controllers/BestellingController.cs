@@ -48,7 +48,7 @@ namespace HelloCore.Controllers
         // GET: Bestelling/Create
         public IActionResult Create()
         {
-            ViewData["KlantID"] = new SelectList(_context.Klanten, "Id", "Naam");
+            ViewData["KlantID"] = new SelectList(_context.Klanten, "KlantID", "Naam");
             return View();
         }
 
@@ -65,7 +65,7 @@ namespace HelloCore.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["KlantID"] = new SelectList(_context.Klanten, "Id", "Naam", bestelling.KlantID);
+            ViewData["KlantID"] = new SelectList(_context.Klanten, "KlantID", "Naam", bestelling.KlantID);
             return View(bestelling);
         }
 
@@ -82,7 +82,7 @@ namespace HelloCore.Controllers
             {
                 return NotFound();
             }
-            ViewData["KlantID"] = new SelectList(_context.Klanten, "Id", "Naam", bestelling.KlantID);
+            ViewData["KlantID"] = new SelectList(_context.Klanten, "KlantID", "Naam", bestelling.KlantID);
             return View(bestelling);
         }
 
@@ -118,7 +118,7 @@ namespace HelloCore.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["KlantID"] = new SelectList(_context.Klanten, "Id", "Naam", bestelling.KlantID);
+            ViewData["KlantID"] = new SelectList(_context.Klanten, "KlantID", "Naam", bestelling.KlantID);
             return View(bestelling);
         }
 
