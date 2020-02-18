@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -34,7 +34,7 @@ namespace HelloCore.Controllers
             }
 
             var klant = await _context.Klanten
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.KlantID == id);
             if (klant == null)
             {
                 return NotFound();
@@ -54,7 +54,7 @@ namespace HelloCore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Naam,Voornaam,AangemaaktDatum")] Klant klant)
+        public async Task<IActionResult> Create([Bind("KlantID,Naam,Voornaam,AangemaaktDatum")] Klant klant)
         {
             if (ModelState.IsValid)
             {
@@ -86,9 +86,9 @@ namespace HelloCore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Naam,Voornaam,AangemaaktDatum")] Klant klant)
+        public async Task<IActionResult> Edit(int id, [Bind("KlantID,Naam,Voornaam,AangemaaktDatum")] Klant klant)
         {
-            if (id != klant.Id)
+            if (id != klant.KlantID)
             {
                 return NotFound();
             }
@@ -102,7 +102,7 @@ namespace HelloCore.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!KlantExists(klant.Id))
+                    if (!KlantExists(klant.KlantID))
                     {
                         return NotFound();
                     }
@@ -125,7 +125,7 @@ namespace HelloCore.Controllers
             }
 
             var klant = await _context.Klanten
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.KlantID == id);
             if (klant == null)
             {
                 return NotFound();
@@ -147,7 +147,7 @@ namespace HelloCore.Controllers
 
         private bool KlantExists(int id)
         {
-            return _context.Klanten.Any(e => e.Id == id);
+            return _context.Klanten.Any(e => e.KlantID == id);
         }
     }
 }

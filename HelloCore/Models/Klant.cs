@@ -8,7 +8,7 @@ namespace HelloCore.Models
 {
     public class Klant
     {
-        public int Id { get; set; }
+        public int KlantID { get; set; }
         [Required]
         public string Naam { get; set;}
 
