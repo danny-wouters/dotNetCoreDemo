@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HelloCore.Data;
 using HelloCore.Models;
+using HelloCore.ViewModels;
 
 namespace HelloCore.Controllers
 {
@@ -22,7 +23,28 @@ namespace HelloCore.Controllers
         // GET: Klant
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Klanten.ToListAsync());
+            var viewModel = new ListKlantViewModel();
+            viewModel.Klanten = await _context.Klanten.ToListAsync();
+            return View(viewModel);
+        }
+
+        // GEt: Klant gefilterd op naam en voornaam
+        public async Task<IActionResult> Search(ListKlantViewModel viewModel)
+        {
+            var result = _context.Klanten.AsQueryable();
+
+            if (!string.IsNullOrEmpty(viewModel.NaamSearch))
+            {
+                result = result.Where(k => k.Naam.StartsWith(viewModel.NaamSearch));
+            }
+            if (!string.IsNullOrEmpty(viewModel.VoornaamSearch))
+            {
+                result = result.Where(k => k.Voornaam.StartsWith(viewModel.VoornaamSearch));
+            }
+
+            viewModel.Klanten = await result.ToListAsync();
+
+            return View("Index", viewModel);
         }
 
         // GET: Klant/Details/5
