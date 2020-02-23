@@ -1,4 +1,5 @@
 ﻿using HelloCore.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HelloCore.Data
 {
-    public class HelloCoreContext : DbContext
+    public class HelloCoreContext : IdentityDbContext
     {
         public HelloCoreContext (DbContextOptions<HelloCoreContext> options) : base(options)
         {
@@ -18,6 +19,7 @@ namespace HelloCore.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Klant>().ToTable("Klant");
             modelBuilder.Entity<Bestelling>().ToTable("Bestelling").Property(p => p.Prijs).HasColumnType("decimal(18,2)");
         }
