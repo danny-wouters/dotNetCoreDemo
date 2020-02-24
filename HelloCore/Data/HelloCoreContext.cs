@@ -1,4 +1,5 @@
-﻿using HelloCore.Models;
+﻿using HelloCore.Areas.Identity.Data;
+using HelloCore.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace HelloCore.Data
 {
-    public class HelloCoreContext : IdentityDbContext
+    public class HelloCoreContext : IdentityDbContext<CustomUser>
     {
         public HelloCoreContext (DbContextOptions<HelloCoreContext> options) : base(options)
         {
