@@ -37,8 +37,10 @@ namespace HelloCore
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddDefaultIdentity<IdentityUser>()
-                .AddRoles<IdentityRole>()
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddRoleManager<RoleManager<IdentityRole>>()
+                .AddDefaultUI()
+                .AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<HelloCoreContext>();
 
             services.AddDbContext<HelloCoreContext>(options => options.UseSqlServer(Configuration.GetConnectionString("HelloCoreConnection")));

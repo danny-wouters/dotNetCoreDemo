@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using HelloCore.Data;
 using HelloCore.Models;
 using HelloCore.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HelloCore.Controllers
 {
+    [Authorize]
     public class BestellingController : Controller
     {
         private readonly HelloCoreContext _context;
@@ -21,6 +23,7 @@ namespace HelloCore.Controllers
         }
 
         // GET: Bestelling
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var viewModel = new ListBestellingViewModel();
