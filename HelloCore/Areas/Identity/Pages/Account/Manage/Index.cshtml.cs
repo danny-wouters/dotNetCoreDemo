@@ -75,6 +75,8 @@ namespace HelloCore.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
+                Naam = user.Naam,
+                GeboorteDatum = user.GeboorteDatum,
                 Email = email,
                 PhoneNumber = phoneNumber
             };
