@@ -4,12 +4,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using HelloCore.Data;
 using HelloCore.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace HelloCore.Controllers.api
 {
+    [ApiController]
     [Route("api/[controller]")]
     public class BestellingController : Controller
     {
@@ -35,6 +38,7 @@ namespace HelloCore.Controllers.api
         }
 
         // GET: api/<controller>/bestellingen
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("bestellingen")]
         public IEnumerable<Bestelling> GetBestellingen()
         {
