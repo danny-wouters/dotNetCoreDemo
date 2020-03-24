@@ -4,14 +4,16 @@ using HelloCore.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HelloCore.Migrations
 {
     [DbContext(typeof(HelloCoreContext))]
-    partial class HelloCoreContextModelSnapshot : ModelSnapshot
+    [Migration("20200324175333_Add_Student_Course_StudentCourse-Models")]
+    partial class Add_Student_Course_StudentCourseModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
