@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HelloCore.Data;
 using HelloCore.Models;
+using HelloCore.ViewModels;
 
 namespace HelloCore.Controllers
 {
@@ -73,12 +74,19 @@ namespace HelloCore.Controllers
                 return NotFound();
             }
 
-            var student = await _context.Students.FindAsync(id);
+            var student = _context.Students.Include(s => s.Courses).SingleOrDefault(x => x.Id == id);
             if (student == null)
             {
                 return NotFound();
             }
-            return View(student);
+
+            var viewmodel = new StudentViewModel
+            {
+                Student = student,
+                CourseList = new SelectList(_context.Courses, "Id", "Name"),
+                SelectedCourses = student.Courses.Select(sc => sc.CourseId).ToList()
+            };
+            return View(viewmodel);
         }
 
         // POST: Student/Edit/5
@@ -86,34 +94,35 @@ namespace HelloCore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Student student)
+        public async Task<IActionResult> Edit(int id, StudentViewModel viewModel)
         {
-            if (id != student.Id)
+            if (id != viewModel.Student.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
+                Student student = _context.Students.Include(c => c.Courses).SingleOrDefault(x => x.Id == id);
+                var newCourses = new List<StudentCourse>();
+                foreach (int courseId in viewModel.SelectedCourses)
                 {
-                    _context.Update(student);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!StudentExists(student.Id))
+                    newCourses.Add(new StudentCourse
                     {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                        StudentId = student.Id,
+                        CourseId = courseId
+                    });
                 }
-                return RedirectToAction(nameof(Index));
+
+                student.Courses.RemoveAll(sc => !newCourses.Contains(sc));
+                student.Courses.AddRange(
+                    newCourses.Where(nc => !student.Courses.Contains(nc)));
+                _context.Update(student);
+                _context.SaveChanges();
+
+                return RedirectToAction("Index");
             }
-            return View(student);
+            return View(viewModel);
         }
 
         // GET: Student/Delete/5

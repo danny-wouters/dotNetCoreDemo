@@ -11,5 +11,6 @@ namespace HelloCore.ViewModels
     {
         public Student Student { get; set; }
         public IEnumerable<SelectListItem> CourseList { get; set; }
+        public IEnumerable<int> SelectedCourses { get; set; }
     }
 }
