@@ -47,7 +47,13 @@ namespace HelloCore.Controllers
         // GET: Student/Create
         public IActionResult Create()
         {
-            return View();
+            var viewmodel = new StudentViewModel
+            {
+                Student = new Student(),
+                CourseList = new SelectList(_context.Courses, "Id", "Name"),
+                SelectedCourses = new List<int>()
+            };
+            return View(viewmodel);
         }
 
         // POST: Student/Create
@@ -55,15 +61,37 @@ namespace HelloCore.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Student student)
+        public async Task<IActionResult> Create(StudentViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(student);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var newCourses = new List<StudentCourse>();
+                if (viewModel.SelectedCourses == null)
+                {
+                    viewModel.SelectedCourses = new List<int>();
+                }
+                foreach (int courseId in viewModel.SelectedCourses)
+                {
+                    newCourses.Add(new StudentCourse
+                    {
+                        StudentId = viewModel.Student.Id,
+                        CourseId = courseId
+                    });
+                }
+
+                _context.Add(viewModel.Student);
+                _context.SaveChanges();
+
+                Student student = _context.Students.Include(c => c.Courses)
+                    .SingleOrDefault(x => x.Id == viewModel.Student.Id);
+                student.Courses.AddRange(
+                    newCourses);
+                _context.Update(student);
+                _context.SaveChanges();
+
+                return RedirectToAction("Index");
             }
-            return View(student);
+            return View(viewModel);
         }
 
         // GET: Student/Edit/5
@@ -104,7 +132,12 @@ namespace HelloCore.Controllers
             if (ModelState.IsValid)
             {
                 Student student = _context.Students.Include(c => c.Courses).SingleOrDefault(x => x.Id == id);
+                student.Name = viewModel.Student.Name;
                 var newCourses = new List<StudentCourse>();
+                if (viewModel.SelectedCourses == null)
+                {
+                    viewModel.SelectedCourses = new List<int>();
+                }
                 foreach (int courseId in viewModel.SelectedCourses)
                 {
                     newCourses.Add(new StudentCourse
