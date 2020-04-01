@@ -10,7 +10,7 @@ namespace HelloCore.Models
     {
         public int KlantID { get; set; }
         [Required]
-        public string Naam { get; set;}
+        public string ExtraNaam { get; set;}
 
         public string Voornaam{ get; set; }        
 
@@ -18,6 +18,6 @@ namespace HelloCore.Models
         [DataType(DataType.Date)]
         public DateTime AangemaaktDatum { get; set; }
 
-        public ICollection<Bestelling> Bestellingen { get; set; }
+        public ICollection<Bestelling> ExtraBestellingen { get; set; }
     }
 }
