@@ -10,7 +10,7 @@ namespace HelloCore.Models
     {
         public int KlantID { get; set; }
         [Required]
-        public string Naam { get; set;}
+        public string Namen { get; set;}
 
         public string Voornaam{ get; set; }        
 
