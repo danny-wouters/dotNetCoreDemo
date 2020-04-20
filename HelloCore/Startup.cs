@@ -5,7 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using HelloCore.Areas.Identity.Data;
 using HelloCore.Data;
+using HelloCore.Data.Repository;
+using HelloCore.Data.UnitOfWork;
 using HelloCore.Helpers;
+using HelloCore.Models;
 using HelloCore.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -72,6 +75,8 @@ namespace HelloCore
 
             // configure DI for application services
             services.AddScoped<IUserService, UserService>();
+            //services.AddScoped<IGenericRepository<Bestelling>, GenericRepository<Bestelling>>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddIdentity<CustomUser, IdentityRole>()
                 .AddRoleManager<RoleManager<IdentityRole>>()
