@@ -11,6 +11,7 @@ namespace HelloCore.Data.UnitOfWork
     {
         private readonly HelloCoreContext _context;
         private IGenericRepository<Bestelling> _bestellingRepository;
+        private IGenericRepository<Klant> _klantRepository;
 
         public UnitOfWork(HelloCoreContext context)
         {
@@ -26,6 +27,18 @@ namespace HelloCore.Data.UnitOfWork
                     this._bestellingRepository = new GenericRepository<Bestelling>(_context);
                 }
                 return _bestellingRepository;
+            }
+        }
+
+        public IGenericRepository<Klant> KlantRepository
+        {
+            get
+            {
+                if (this._klantRepository == null)
+                {
+                    this._klantRepository = new GenericRepository<Klant>(_context);
+                }
+                return _klantRepository;
             }
         }
 
