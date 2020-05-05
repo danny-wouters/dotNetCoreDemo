@@ -86,13 +86,7 @@ namespace HelloCore.Controllers.api
                 return BadRequest();
             }
 
-            var vOldBestelling = _uow.BestellingRepository.GetById(id);
-
-            vOldBestelling.Artikel = value.Artikel;
-            vOldBestelling.KlantID = value.KlantID;
-            vOldBestelling.Prijs = value.Prijs;
-
-            _uow.BestellingRepository.Update(id, vOldBestelling);
+            _uow.BestellingRepository.Update(id, value);
             _uow.Save();
 
             return NoContent();
