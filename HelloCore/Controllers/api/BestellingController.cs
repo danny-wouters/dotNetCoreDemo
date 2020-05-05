@@ -33,6 +33,7 @@ namespace HelloCore.Controllers.api
         }
 
         // GET api/<controller>/5
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public Bestelling Get(int id)
         {
@@ -40,7 +41,7 @@ namespace HelloCore.Controllers.api
         }
 
         // GET: api/<controller>/bestellingen
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize]
         [HttpGet("bestellingen")]
         public IEnumerable<Bestelling> GetBestellingen()
         {
