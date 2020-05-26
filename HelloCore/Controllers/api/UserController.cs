@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -40,23 +42,35 @@ namespace HelloCore.Controllers.api
             _appSettings = appSettings.Value;
         }
 
+        // GET: api/<controller>
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpGet]
+        public IEnumerable<User> Get()
+        {
+            List<User> users = new List<User>();
+            users.Add(new User() { UserID = 1, FirstName = "Test", LastName = "Example", Username = "TestExample", Password = "test" });
+
+            return users;
+        }
+
 
         [HttpPost("authenticate")]
         public async Task<object> Authenticate([FromBody]User userParam)
         {
-            var result = await _signInManager.PasswordSignInAsync(userParam.Email, userParam.Password, false, false);
+            var result = await _signInManager.PasswordSignInAsync(userParam.Username, userParam.Password, false, false);
 
             if (result.Succeeded)
             {
-                CustomUser appUser = _userManager.Users.SingleOrDefault(r => r.Email == userParam.Email);
-                return await GenerateJwtToken(userParam.Email, appUser);
+                CustomUser appUser = _userManager.Users.SingleOrDefault(r => r.Email == userParam.Username);
+                userParam.Token = GenerateJwtToken(userParam.Email, appUser).ToString();
+
+                return userParam;
             }
 
             return BadRequest(new { message = "Username or password is incorrect" });
-
         }
 
-        private async Task<object> GenerateJwtToken(string email, CustomUser user)
+        private string GenerateJwtToken(string email, CustomUser user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
@@ -73,5 +87,6 @@ namespace HelloCore.Controllers.api
 
             return tokenHandler.WriteToken(token);
         }
+
     }
 }

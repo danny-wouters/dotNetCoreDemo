@@ -33,6 +33,8 @@ namespace HelloCore
             Configuration = configuration;
         }
 
+        readonly string MyAllowAllOrigins = "_myAllowAllOrigins";
+
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -72,6 +74,11 @@ namespace HelloCore
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };
+            });
+
+            services.AddCors(c =>
+            {
+                c.AddPolicy(MyAllowAllOrigins, options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             });
 
             // configure DI for application services
@@ -143,6 +150,8 @@ namespace HelloCore
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+
+            app.UseCors(MyAllowAllOrigins);
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
