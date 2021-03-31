@@ -1,17 +1,60 @@
-﻿@model List<HelloCore.Models.Klant>
+﻿@model HelloCore.ViewModels.ListKlantViewModel
+
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Klanten</h1>
-<ul>
-    @foreach (var klant in Model)
-    {
-    <li>
-        @Html.DisplayFor(modelItem => klant.Voornaam)
-        @Html.DisplayFor(modelItem => klant.Naam)
-        @Html.DisplayFor(modelItem => klant.AangemaaktDatum)
-    </li>
-    }
-</ul>
+<h2>Index</h2>
 
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<form asp-controller="Klant" asp-action="Search" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Zoek op Naam:
+            <input asp-for="NaamSearch" /><br />
+            Zoek op Voornaam:
+            <input asp-for="VoornaamSearch" /><br />
+            <input type="submit" value="Zoeken" class="btn btn-default" /><br />
+            <a asp-controller="Klant" asp-action="Index">Terug naar volledige lijst</a>
+        </p>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Klanten[0].Naam)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Klanten[0].Voornaam)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Klanten[0].AangemaaktDatum)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Klanten) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Naam)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Voornaam)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AangemaaktDatum)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.KlantID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.KlantID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.KlantID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
